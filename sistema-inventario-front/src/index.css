@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/fraunces";
+
+@theme {
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+
+  --color-brand-50: #f7f6f3;
+  --color-brand-100: #eeece7;
+  --color-brand-200: #e0ddd5;
+  --color-brand-300: #c9c5ba;
+  --color-brand-400: #9c978b;
+  --color-brand-500: #75716a;
+  --color-brand-600: #55524c;
+  --color-brand-700: #3a3834;
+  --color-brand-800: #232220;
+  --color-brand-900: #171615;
+  --color-brand-950: #0e0e0d;
+
+  --color-signal-200: #fbd9cc;
+  --color-signal-300: #f4a98c;
+  --color-signal-400: #ec7a54;
+  --color-signal-500: #e4572e;
+
+  --color-stone-50: #fafaf8;
+  --color-stone-100: #f4f3ef;
+  --color-stone-200: #eae8e2;
+  --color-stone-300: #d9d6cd;
+}
+
+@layer base {
+  body {
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bg-papel {
+  background-color: var(--color-stone-50);
+}

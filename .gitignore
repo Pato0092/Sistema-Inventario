@@ -1,0 +1,26 @@
+# --- Backend (Python / FastAPI) ---
+sistema_inventario/venv/
+sistema_inventario/.venv/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# --- Frontend (React / TypeScript / Vite) ---
+sistema-inventario-front/node_modules/
+sistema-inventario-front/dist/
+sistema-inventario-front/dist-ssr/
+*.local
+
+# --- Variables de entorno y credenciales ---
+.env
+**/.env
+**/.env.*
+# La plantilla sí se comparte (no lleva datos reales)
+!**/.env.example
+
+# --- Editores y Sistema Operativo ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

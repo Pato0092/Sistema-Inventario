@@ -1,0 +1,98 @@
+from app.domain.repositories.producto_repository import ProductoRepository
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from app.domain.entities.producto import Producto
+from app.infrastructure.models.producto_model import ProductoModel 
+from app.infrastructure.models.inventario_model import InventarioModel
+
+class ProductoRepositoryPostgres(ProductoRepository):
+    def __init__(self, session : Session):
+        self.session = session
+
+    def listar_todos(self) -> list[Producto]:
+        productos_db = self.session.query(ProductoModel).all()
+        productos_dominio = []
+        for p_db in productos_db:
+            producto_dominio = Producto(
+                id_producto=p_db.id_producto,
+                codigo_barras=p_db.codigo_barras,
+                nombre=p_db.nombre,
+                marca=p_db.marca,
+                presentacion=p_db.presentacion,
+                precio_venta=p_db.precio_venta,
+                estado=p_db.estado,
+                id_categoria=p_db.id_categoria, fecha_caducidad=p_db.fecha_caducidad)
+            productos_dominio.append(producto_dominio)
+        return productos_dominio
+
+    def buscar_por_id(self, id_producto : int) -> Producto | None:
+        resultado_db = self.session.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).first()
+        if resultado_db is None:
+            return resultado_db
+        p_db = Producto(
+            id_producto=resultado_db.id_producto,
+            codigo_barras=resultado_db.codigo_barras,
+            nombre=resultado_db.nombre,
+            marca=resultado_db.marca,
+            presentacion=resultado_db.presentacion,
+            precio_venta=resultado_db.precio_venta,
+            estado=resultado_db.estado,
+            id_categoria=resultado_db.id_categoria, fecha_caducidad=resultado_db.fecha_caducidad
+        )
+        return p_db
+
+    def guardar_producto(self, producto : Producto) -> Producto: 
+        producto_nuevo = ProductoModel(
+            codigo_barras=producto.codigo_barras,
+            nombre=producto.nombre,
+            marca=producto.marca,
+            presentacion=producto.presentacion,
+            precio_venta=producto.precio_venta,
+            estado=producto.estado,
+            id_categoria=producto.id_categoria, fecha_caducidad=producto.fecha_caducidad
+        )
+        self.session.add(producto_nuevo)
+        self.session.commit()
+        self.session.refresh(producto_nuevo)
+        producto.id_producto = producto_nuevo.id_producto
+        return producto
+
+    def modificar_producto(self, producto : Producto) -> None:
+        producto_db = self.session.query(ProductoModel).filter(ProductoModel.id_producto == producto.id_producto).first()
+        if producto_db is not None:
+            producto_db.codigo_barras=producto.codigo_barras
+            producto_db.nombre=producto.nombre
+            producto_db.marca=producto.marca
+            producto_db.presentacion=producto.presentacion
+            producto_db.precio_venta=producto.precio_venta
+            producto_db.estado=producto.estado
+            producto_db.id_categoria=producto.id_categoria
+            producto_db.fecha_caducidad=producto.fecha_caducidad
+            self.session.commit()
+
+    def eliminar_producto(self, id_producto : int) -> None:
+        producto_db = self.session.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).first()
+        if producto_db is None:
+            return
+        try:
+            self.session.query(InventarioModel).filter(InventarioModel.id_producto == id_producto).delete()
+            self.session.delete(producto_db)
+            self.session.commit()
+        except IntegrityError:
+            self.session.rollback()
+            raise ValueError("No se puede eliminar: el producto tiene ventas, compras o movimientos registrados. Desactívalo en su lugar.")
+
+    def buscar_por_codigo_barras(self, codigo_barras : str) -> Producto | None:
+        modelo = self.session.query(ProductoModel).filter(ProductoModel.codigo_barras == codigo_barras).first()
+        if not modelo:
+            return None
+        return Producto(
+            id_producto=modelo.id_producto,
+            codigo_barras=modelo.codigo_barras,
+            nombre=modelo.nombre,
+            marca=modelo.marca,
+            presentacion=modelo.presentacion,
+            precio_venta=modelo.precio_venta,
+            estado=modelo.estado,
+            id_categoria=modelo.id_categoria, fecha_caducidad=modelo.fecha_caducidad
+        )
