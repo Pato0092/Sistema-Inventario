@@ -2,15 +2,12 @@
 Aplicación web para gestionar el inventario de una tienda: productos y existencias, ventas, compras y pedidos a proveedores, movimientos de stock y usuarios con permisos. Está pensada para pequeños comercios que quieren instalarla en su propia computadora con una base de datos PostgreSQL local.
 
 # Equipo
-- Patricio Vaca Olvera — [Expediente] — [Rol]
-- [Nombre del compañero] — [Expediente] — [Rol]
+- Patricio Vaca Olvera — 333325
 
 # Stack
 Python 3.14, TypeScript, FastAPI, SQLAlchemy 2, Alembic, React 19, Vite, Tailwind CSS 4, Axios y PostgreSQL 18.
 
 # Arquitectura
-![Diagrama](docs/arquitectura.png)
-
 Clean Architecture en el servidor (`sistema_inventario/app/`) y en la pantalla web (`sistema-inventario-front/src/`). Las dependencias apuntan siempre hacia el dominio:
 
 - **Domain** (`domain/`): entidades, reglas de negocio y puertos (interfaces de repositorios, unidad de trabajo, hasher y tokens). No depende de ningún framework.
@@ -39,3 +36,6 @@ Clean Architecture en el servidor (`sistema_inventario/app/`) y en la pantalla w
    npm run dev
    ```
    La aplicación queda en <http://localhost:5173> y la API en <http:localhost:8000>.
+
+ # Documentación
+- ADRs: `docs/adr/`
