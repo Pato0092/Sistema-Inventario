@@ -11,11 +11,11 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY or len(SECRET_KEY) < 32:
     raise RuntimeError(
-        "Falta SECRET_KEY en el archivo .env (mínimo 32 caracteres). "
+        "Falta la variable de entorno SECRET_KEY (mínimo 32 caracteres). "
         "Genera una con: python -c \"import secrets; print(secrets.token_urlsafe(64))\""
     )
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", str(60 * 24)))
 
 class BcryptPasswordHasher(PasswordHasher):
     def __init__(self):

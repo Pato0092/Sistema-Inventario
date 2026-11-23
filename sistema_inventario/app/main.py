@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.presentation.routes import producto_routes, categoria_routes, inventario_routes
@@ -9,10 +11,13 @@ app = FastAPI(
     title="Sistema de Inventario",
     version="1.0.0"
 )
-origins = [
-    "http://localhost:5173",  
-    "http://127.0.0.1:5173",
-]
+load_dotenv()
+
+origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+for _origen in os.getenv("CORS_ORIGINS", "").split(","):
+    _origen = _origen.strip().rstrip("/")
+    if _origen and _origen not in origins:
+        origins.append(_origen)
 
 app.add_middleware(
     CORSMiddleware,
