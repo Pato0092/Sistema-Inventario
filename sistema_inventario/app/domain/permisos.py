@@ -1,3 +1,5 @@
+from app.domain.errores import ErrorDeNegocio
+
 ROL_ADMIN = "administrador"
 ROL_EMPLEADO = "empleado"
 ROLES = (ROL_ADMIN, ROL_EMPLEADO)
@@ -24,7 +26,7 @@ PERMISOS_VER = tuple(c for c in CLAVES if c.endswith(".ver"))
 def normalizar(claves: list[str]) -> list[str]:
     desconocidas = [c for c in claves if c not in CLAVES]
     if desconocidas:
-        raise ValueError(f"Permiso desconocido: {desconocidas[0]}.")
+        raise ErrorDeNegocio(f"Permiso desconocido: {desconocidas[0]}.")
     resultado = set(claves)
     for c in list(resultado):
         if c.endswith(".editar"):

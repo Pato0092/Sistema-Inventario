@@ -26,7 +26,7 @@ class CompraRepositoryPostgres(CompraRepository):
                 precio_proveedor=detalle.precio_proveedor
             )
             self.session.add(detalle_model)
-        self.session.commit()
+        self.session.flush()
         compra.id_compra = compra_model.id_compra
         return compra
 

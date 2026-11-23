@@ -28,7 +28,7 @@ class InventarioRepositoryPostgres(InventarioRepository):
         if modelo:
             modelo.cantidad = inventario.cantidad
             modelo.stock_minimo = inventario.stock_minimo
-            self.session.commit()
+            self.session.flush()
             return inventario         
         nuevo_modelo = InventarioModel(
             id_producto=inventario.id_producto,
@@ -36,5 +36,5 @@ class InventarioRepositoryPostgres(InventarioRepository):
             stock_minimo=inventario.stock_minimo
         )
         self.session.add(nuevo_modelo)
-        self.session.commit()
+        self.session.flush()
         return inventario

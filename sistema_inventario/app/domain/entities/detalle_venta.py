@@ -1,3 +1,5 @@
+from app.domain.errores import ErrorDeNegocio
+
 class DetalleVenta:
     def __init__(
         self, 
@@ -7,11 +9,11 @@ class DetalleVenta:
         costo_unitario: float | None = 0.0
     ):
         if cantidad <= 0:
-            raise ValueError("La cantidad vendida debe ser mayor a cero.")
+            raise ErrorDeNegocio("La cantidad vendida debe ser mayor a cero.")
         if precio_unitario <= 0:
-            raise ValueError("El precio unitario debe ser mayor a cero.")
+            raise ErrorDeNegocio("El precio unitario debe ser mayor a cero.")
         if costo_unitario is not None and costo_unitario < 0:
-            raise ValueError("El costo unitario no puede ser negativo.")
+            raise ErrorDeNegocio("El costo unitario no puede ser negativo.")
         self.id_producto = id_producto
         self.cantidad = cantidad
         self.precio_unitario = precio_unitario

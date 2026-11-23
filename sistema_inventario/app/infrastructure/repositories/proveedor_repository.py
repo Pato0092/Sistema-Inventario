@@ -19,7 +19,7 @@ class ProveedorRepositoryPostgres(ProveedorRepository):
             estado=proveedor.estado
         )
         self.session.add(modelo)
-        self.session.commit()
+        self.session.flush()
         self.session.refresh(modelo)
         proveedor.id_proveedor = modelo.id_proveedor
         return proveedor
@@ -43,5 +43,5 @@ class ProveedorRepositoryPostgres(ProveedorRepository):
             modelo.telefono = proveedor.telefono
             modelo.correo = proveedor.correo
             modelo.estado = proveedor.estado
-            self.session.commit()
+            self.session.flush()
         return proveedor

@@ -16,7 +16,7 @@ class MovimientoRepositoryPostgres(MovimientoRepository):
             DetalleMovimientoModel(id_producto=id_producto, cantidad=cantidad, motivo=motivo, tipo=tipo)
         ]
         self.session.add(movimiento)
-        self.session.commit()
+        self.session.flush()
 
     def listar(self, id_producto : int | None, limit : int, offset : int):
         q = (

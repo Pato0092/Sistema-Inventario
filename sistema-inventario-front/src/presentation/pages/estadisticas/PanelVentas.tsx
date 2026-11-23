@@ -20,7 +20,7 @@ import {
   type Delta,
   type TooltipState,
 } from "../../components/charts";
-import { descargarCsv } from "../../../infrastructure/archivos/exportar";
+import { descargarCsv } from "../../exportar";
 import { useInventario } from "../../hooks/useInventario";
 import { useVentas } from "../../hooks/useVentas";
 

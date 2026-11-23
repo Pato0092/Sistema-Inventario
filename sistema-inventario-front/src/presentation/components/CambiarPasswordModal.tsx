@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { inventarioApi } from "../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
+import { container } from "../../infrastructure/container";
+import { mensajeError } from "../mensajeError";
 
 const inputClass =
   "w-full rounded-lg border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-brand-600/15";
@@ -20,7 +20,7 @@ export const CambiarPasswordModal: React.FC<{ onClose: () => void }> = ({ onClos
     if (nueva !== confirmar) return setError("La confirmación no coincide con la nueva contraseña.");
     setSaving(true);
     try {
-      await inventarioApi.cambiarPassword(actual, nueva);
+      await container.inventario.cambiarPassword(actual, nueva);
       setListo(true);
     } catch (err) {
       setError(mensajeError(err));

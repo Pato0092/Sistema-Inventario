@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { UsuarioDto } from "../../infrastructure/api/inventarioApi";
+import type { UsuarioDto } from "../../domain/modelos";
 
 export interface Sesion {
   usuario: UsuarioDto;

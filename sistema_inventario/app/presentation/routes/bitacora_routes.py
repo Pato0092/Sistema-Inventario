@@ -1,7 +1,8 @@
 from datetime import date, datetime, time
 from fastapi import APIRouter, Depends, Query, Response
 from app.application.services.bitacora_service import BitacoraService
-from app.infrastructure.dependencies import get_bitacora_service, requiere_admin
+from app.infrastructure.dependencies import get_bitacora_service
+from app.presentation.guardias import requiere_admin
 from app.presentation.schemas.bitacora_schema import RegistroActividadResponse
 
 router = APIRouter(prefix="/bitacora", tags=["Bitácora de actividad"], dependencies=[Depends(requiere_admin)])

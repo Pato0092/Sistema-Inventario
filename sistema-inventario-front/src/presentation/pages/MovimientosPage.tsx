@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { inventarioApi } from "../../infrastructure/api/inventarioApi";
-import { descargarCsv } from "../../infrastructure/archivos/exportar";
+import { container } from "../../infrastructure/container";
+import { descargarCsv } from "../exportar";
 import { Paginador } from "../components/Paginador";
 import { fechaHora } from "../formato";
 import { useInventario } from "../hooks/useInventario";
@@ -25,7 +25,7 @@ export const MovimientosPage: React.FC = () => {
 
   const traer = useCallback(
     (limit: number, offset: number) =>
-      inventarioApi.movimientos({
+      container.inventario.movimientos({
         id_producto: producto ? Number(producto) : undefined,
         limit,
         offset,

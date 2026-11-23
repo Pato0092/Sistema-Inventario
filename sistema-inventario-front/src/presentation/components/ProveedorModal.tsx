@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { DatosProveedor } from "../../infrastructure/api/inventarioApi";
+import type { DatosProveedor } from "../../domain/modelos";
 import type { ItemProveedor } from "../hooks/useProveedores";
 
 interface ProveedorModalProps {

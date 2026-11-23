@@ -1,10 +1,5 @@
 import React, { useMemo, useState } from "react";
-import type {
-  DatosEdicionUsuario,
-  DatosNuevoUsuario,
-  PermisoDto,
-  UsuarioDto,
-} from "../../infrastructure/api/inventarioApi";
+import type { DatosEdicionUsuario, DatosNuevoUsuario, PermisoDto, UsuarioDto } from "../../domain/modelos";
 
 interface UsuarioModalProps {
   catalogo: PermisoDto[];

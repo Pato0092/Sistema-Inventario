@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type DatosEdicionUsuario,
-  type DatosNuevoUsuario,
-  type PermisoDto,
-  type UsuarioDto,
-} from "../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
+import type { DatosEdicionUsuario, DatosNuevoUsuario, PermisoDto, UsuarioDto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
+import { mensajeError } from "../mensajeError";
 
 export function useUsuarios() {
   const [items, setItems] = useState<UsuarioDto[]>([]);
@@ -19,8 +14,8 @@ export function useUsuarios() {
     setError(null);
     try {
       const [usuarios, permisos] = await Promise.all([
-        inventarioApi.usuarios(),
-        inventarioApi.catalogoPermisos(),
+        container.inventario.usuarios(),
+        container.inventario.catalogoPermisos(),
       ]);
       setItems(usuarios);
       setCatalogo(permisos);
@@ -51,8 +46,8 @@ export function useUsuarios() {
     error,
     recargar: cargar,
     crearUsuario: (datos: DatosNuevoUsuario) =>
-      ejecutar(() => inventarioApi.crearUsuario(datos)),
+      ejecutar(() => container.inventario.crearUsuario(datos)),
     actualizarUsuario: (id: number, datos: DatosEdicionUsuario) =>
-      ejecutar(() => inventarioApi.actualizarUsuario(id, datos)),
+      ejecutar(() => container.inventario.actualizarUsuario(id, datos)),
   };
 }

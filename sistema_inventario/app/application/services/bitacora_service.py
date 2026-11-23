@@ -1,23 +1,24 @@
 from datetime import datetime
 from app.domain.entities.registro_actividad import RegistroActividad
 from app.domain.repositories.bitacora_repository import BitacoraRepository
+from app.domain.unidad_trabajo import UnidadTrabajo
 
 MAX_PAGINA = 200
 
 class BitacoraService:
-    def __init__(self, repositorio : BitacoraRepository):
+    def __init__(self, repositorio : BitacoraRepository, unidad : UnidadTrabajo):
         self.repositorio = repositorio
+        self.unidad = unidad
 
     def registrar(self, id_usuario : int | None, accion : str, entidad : str, id_entidad : int | None = None, detalle : str | None = None) -> None:
         try:
-            self.repositorio.registrar(RegistroActividad(
-                accion=accion, entidad=entidad, id_usuario=id_usuario,
-                id_entidad=id_entidad, detalle=detalle,
-            ))
+            with self.unidad:
+                self.repositorio.registrar(RegistroActividad(
+                    accion=accion, entidad=entidad, id_usuario=id_usuario,
+                    id_entidad=id_entidad, detalle=detalle,
+                ))
         except Exception:
-            session = getattr(self.repositorio, "session", None)
-            if session is not None:
-                session.rollback()
+            pass
 
     def listar(
         self,

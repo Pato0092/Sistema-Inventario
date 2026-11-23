@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { inventarioApi, type VentaDto } from "../../../infrastructure/api/inventarioApi";
-import { descargarCsv, escaparHtml, imprimirDocumento } from "../../../infrastructure/archivos/exportar";
+import type { VentaDto } from "../../../domain/modelos";
+import { container } from "../../../infrastructure/container";
+import { descargarCsv, escaparHtml, imprimirDocumento } from "../../exportar";
 import { Paginador } from "../../components/Paginador";
 import { dinero, fechaHora } from "../../formato";
 import type { ItemInventario } from "../../hooks/useInventario";
@@ -26,7 +27,7 @@ export const HistorialVentas: React.FC<HistorialVentasProps> = ({ items, version
   const traer = useCallback(
     (limit: number, offset: number) => {
       void version;
-      return inventarioApi.ventas({ desde: desde || undefined, hasta: hasta || undefined, limit, offset });
+      return container.inventario.ventas({ desde: desde || undefined, hasta: hasta || undefined, limit, offset });
     },
     [desde, hasta, version],
   );

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Pagina } from "../../infrastructure/api/inventarioApi";
+import type { Pagina } from "../../domain/modelos";
 
 export const TAMANO_PAGINA = 25;
 const MAX_POR_PETICION = 200; 

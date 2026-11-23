@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { ConfirmarEliminarModal } from "../components/ConfirmarEliminarModal";
 import { ProductoModal } from "../components/ProductoModal";
-import { descargarCsv } from "../../infrastructure/archivos/exportar";
+import { descargarCsv } from "../exportar";
 import { diasHasta, fechaDia } from "../formato";
 import { useInventario, type ItemInventario } from "../hooks/useInventario";
 import { useSesion } from "../context/SesionContext";

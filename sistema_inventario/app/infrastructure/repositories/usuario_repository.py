@@ -40,7 +40,7 @@ class UsuarioRepositoryPostgres(UsuarioRepository):
             fecha_creacion=usuario.fecha_creacion
         )
         self.session.add(usuario_model)
-        self.session.commit()
+        self.session.flush()
         self.session.refresh(usuario_model)
         usuario.id_usuario = usuario_model.id_usuario
         return usuario
@@ -64,7 +64,7 @@ class UsuarioRepositoryPostgres(UsuarioRepository):
             model.password_hash = usuario.password_hash
             model.rol = usuario.rol
             model.estado = usuario.estado
-            self.session.commit()
+            self.session.flush()
         return usuario
 
     def reemplazar_permisos(self, id_usuario : int, claves : list[str]) -> None:
@@ -81,7 +81,7 @@ class UsuarioRepositoryPostgres(UsuarioRepository):
         self.session.query(UsuarioPermisoModel).filter(UsuarioPermisoModel.id_usuario == id_usuario).delete()
         for clave in claves:
             self.session.add(UsuarioPermisoModel(id_usuario=id_usuario, id_permiso=existentes[clave]))
-        self.session.commit()
+        self.session.flush()
 
     def contar_administradores_activos(self) -> int:
         return (

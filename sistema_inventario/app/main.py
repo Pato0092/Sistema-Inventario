@@ -1,6 +1,6 @@
-import os
-from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from app.domain.errores import ErrorDeNegocio
 from starlette.middleware.cors import CORSMiddleware
 from app.presentation.routes import producto_routes, categoria_routes, inventario_routes
 from app.presentation.routes.venta_routes import router as venta_router
@@ -11,13 +11,10 @@ app = FastAPI(
     title="Sistema de Inventario",
     version="1.0.0"
 )
-load_dotenv()
-
-origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
-for _origen in os.getenv("CORS_ORIGINS", "").split(","):
-    _origen = _origen.strip().rstrip("/")
-    if _origen and _origen not in origins:
-        origins.append(_origen)
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,6 +24,10 @@ app.add_middleware(
     allow_headers=["*"],  
     expose_headers=["X-Total-Count"],
 )
+
+@app.exception_handler(ErrorDeNegocio)
+async def error_de_negocio(request: Request, error: ErrorDeNegocio):
+    return JSONResponse(status_code=400, content={"detail": str(error)})
 
 app.include_router(producto_routes.router)
 app.include_router(categoria_routes.router)

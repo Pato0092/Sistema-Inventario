@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type UsuarioDto,
-} from "../../infrastructure/api/inventarioApi";
+import type { UsuarioDto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
 
 export function useSesionActual(autenticado: boolean) {
   const [usuario, setUsuario] = useState<UsuarioDto | null>(null);
@@ -18,7 +16,7 @@ export function useSesionActual(autenticado: boolean) {
     let activo = true;
     setCargando(true);
     setError(null);
-    inventarioApi
+    container.inventario
       .miPerfil()
       .then((u) => activo && setUsuario(u))
       .catch(() => activo && setError("No se pudo cargar tu perfil."))

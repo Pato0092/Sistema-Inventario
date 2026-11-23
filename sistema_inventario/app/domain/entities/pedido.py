@@ -1,3 +1,4 @@
+from app.domain.errores import ErrorDeNegocio
 from datetime import datetime
 
 EN_ESPERA = "EN_ESPERA"
@@ -8,9 +9,9 @@ CANCELADO = "CANCELADO"
 class DetallePedido:
     def __init__(self, id_producto : int, cantidad : int, precio_proveedor : float):
         if cantidad <= 0:
-            raise ValueError("La cantidad pedida debe ser mayor a 0.")
+            raise ErrorDeNegocio("La cantidad pedida debe ser mayor a 0.")
         if precio_proveedor <= 0:
-            raise ValueError("El precio del proveedor debe ser mayor a 0.")
+            raise ErrorDeNegocio("El precio del proveedor debe ser mayor a 0.")
         self.id_producto = id_producto
         self.cantidad = cantidad
         self.precio_proveedor = precio_proveedor

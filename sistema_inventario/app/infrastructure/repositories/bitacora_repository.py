@@ -18,7 +18,7 @@ class BitacoraRepositoryPostgres(BitacoraRepository):
             id_entidad=registro.id_entidad,
             detalle=(registro.detalle or None) and registro.detalle[:500],
         ))
-        self.session.commit()
+        self.session.flush()
 
     def listar(self, id_usuario, entidad, desde, hasta, limit, offset):
         q = self.session.query(BitacoraModel, UsuarioModel.nombre).outerjoin(

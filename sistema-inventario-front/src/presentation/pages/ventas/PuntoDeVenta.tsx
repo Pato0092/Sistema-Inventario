@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
-import { inventarioApi } from "../../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../../infrastructure/api/mensajeError";
+import { container } from "../../../infrastructure/container";
+import { mensajeError } from "../../mensajeError";
 import { dinero } from "../../formato";
 import type { ItemInventario } from "../../hooks/useInventario";
 
@@ -106,7 +106,7 @@ export const PuntoDeVenta: React.FC<PuntoDeVentaProps> = ({
     setCobrando(true);
     setError(null);
     try {
-      const venta = await inventarioApi.registrarVenta(
+      const venta = await container.inventario.registrarVenta(
         lineas.map((l) => ({ id_producto: l.item.id_producto, cantidad: l.cantidad })),
       );
       setUltima({ id: venta.id_venta, total: venta.total, cambio });

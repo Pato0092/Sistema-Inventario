@@ -1,3 +1,4 @@
+from app.domain.errores import ErrorDeNegocio
 from app.domain.repositories.producto_repository import ProductoRepository
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -52,7 +53,7 @@ class ProductoRepositoryPostgres(ProductoRepository):
             id_categoria=producto.id_categoria, fecha_caducidad=producto.fecha_caducidad
         )
         self.session.add(producto_nuevo)
-        self.session.commit()
+        self.session.flush()
         self.session.refresh(producto_nuevo)
         producto.id_producto = producto_nuevo.id_producto
         return producto
@@ -68,19 +69,18 @@ class ProductoRepositoryPostgres(ProductoRepository):
             producto_db.estado=producto.estado
             producto_db.id_categoria=producto.id_categoria
             producto_db.fecha_caducidad=producto.fecha_caducidad
-            self.session.commit()
+            self.session.flush()
 
     def eliminar_producto(self, id_producto : int) -> None:
         producto_db = self.session.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).first()
         if producto_db is None:
             return
         try:
-            self.session.query(InventarioModel).filter(InventarioModel.id_producto == id_producto).delete()
-            self.session.delete(producto_db)
-            self.session.commit()
+            with self.session.begin_nested():
+                self.session.query(InventarioModel).filter(InventarioModel.id_producto == id_producto).delete()
+                self.session.delete(producto_db)
         except IntegrityError:
-            self.session.rollback()
-            raise ValueError("No se puede eliminar: el producto tiene ventas, compras o movimientos registrados. Desactívalo en su lugar.")
+            raise ErrorDeNegocio("No se puede eliminar: el producto tiene ventas, compras o movimientos registrados. Desactívalo en su lugar.")
 
     def buscar_por_codigo_barras(self, codigo_barras : str) -> Producto | None:
         modelo = self.session.query(ProductoModel).filter(ProductoModel.codigo_barras == codigo_barras).first()

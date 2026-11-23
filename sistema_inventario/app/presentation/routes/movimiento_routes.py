@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Query, Response
 from app.application.services.movimiento_service import MovimientoService
-from app.infrastructure.dependencies import get_movimiento_service, requiere_permisos
+from app.infrastructure.dependencies import get_movimiento_service
+from app.presentation.guardias import requiere_permisos
 from app.presentation.schemas.movimiento_schema import LineaMovimientoResponse
 
 router = APIRouter(prefix="/movimientos", tags=["Movimientos de inventario"])

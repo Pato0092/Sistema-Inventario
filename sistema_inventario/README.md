@@ -1,5 +1,7 @@
 # Sistema de Inventario - Clean Architecture
 
+> Este documento es el ejercicio académico original (`entregable.py`, con repositorios en memoria y JSON). El diagrama de la arquitectura real del sistema y las instrucciones para correrlo están en el [`README.md`](../README.md) de la raíz.
+
 ## Parte 1. Identificar el núcleo
 
 **Regla 1: El precio de venta de un producto debe ser mayor a cero.**

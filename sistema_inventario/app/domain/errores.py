@@ -1,0 +1,2 @@
+class ErrorDeNegocio(ValueError):
+    pass

@@ -1,3 +1,4 @@
+from app.domain.errores import ErrorDeNegocio
 from datetime import datetime
 from sqlalchemy.orm import Session
 from app.domain.entities.pedido import Pedido, DetallePedido, EN_ESPERA
@@ -41,7 +42,7 @@ class PedidoRepositoryPostgres(PedidoRepository):
         )
         modelo.detalles = _modelos_detalle(pedido.detalles)
         self.session.add(modelo)
-        self.session.commit()
+        self.session.flush()
         self.session.refresh(modelo)
         return _a_entidad(modelo)
 
@@ -61,15 +62,13 @@ class PedidoRepositoryPostgres(PedidoRepository):
             .first()
         )
         if modelo is None:
-            self.session.rollback()
-            raise ValueError("Pedido no encontrado.")
+            raise ErrorDeNegocio("Pedido no encontrado.")
         if modelo.estado != EN_ESPERA:
-            self.session.rollback()
-            raise ValueError("Solo se pueden editar pedidos en espera.")
+            raise ErrorDeNegocio("Solo se pueden editar pedidos en espera.")
         modelo.detalles.clear()
         self.session.flush()
         modelo.detalles.extend(_modelos_detalle(detalles))
-        self.session.commit()
+        self.session.flush()
 
     def transicionar(self, id_pedido : int, desde : str, hacia : str) -> bool:
         filas = (
@@ -77,7 +76,7 @@ class PedidoRepositoryPostgres(PedidoRepository):
             .filter(PedidoModel.id_pedido == id_pedido, PedidoModel.estado == desde)
             .update({PedidoModel.estado: hacia}, synchronize_session=False)
         )
-        self.session.commit()
+        self.session.flush()
         return filas > 0
 
     def asociar_compra(self, id_pedido : int, id_compra : int, fecha_entrega : datetime) -> None:
@@ -85,4 +84,4 @@ class PedidoRepositoryPostgres(PedidoRepository):
             {PedidoModel.id_compra: id_compra, PedidoModel.fecha_entrega: fecha_entrega},
             synchronize_session=False,
         )
-        self.session.commit()
+        self.session.flush()

@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type DetallePedidoDto,
-  type PedidoDto,
-} from "../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
+import type { DetallePedidoDto, PedidoDto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
+import { mensajeError } from "../mensajeError";
 
 export function usePedidos() {
   const [items, setItems] = useState<PedidoDto[]>([]);
@@ -15,7 +12,7 @@ export function usePedidos() {
     setLoading(true);
     setError(null);
     try {
-      setItems(await inventarioApi.pedidos());
+      setItems(await container.inventario.pedidos());
     } catch {
       setError("No se pudieron cargar los pedidos desde el servidor.");
     } finally {
@@ -42,12 +39,12 @@ export function usePedidos() {
     error,
     recargar: cargar,
     crearPedido: (idProveedor: number, detalles: DetallePedidoDto[]) =>
-      ejecutar(() => inventarioApi.crearPedido(idProveedor, detalles)),
+      ejecutar(() => container.inventario.crearPedido(idProveedor, detalles)),
     actualizarPedido: (id: number, detalles: DetallePedidoDto[]) =>
-      ejecutar(() => inventarioApi.actualizarPedido(id, detalles)),
+      ejecutar(() => container.inventario.actualizarPedido(id, detalles)),
     entregarPedido: (id: number) =>
-      ejecutar(() => inventarioApi.entregarPedido(id)),
+      ejecutar(() => container.inventario.entregarPedido(id)),
     cancelarPedido: (id: number) =>
-      ejecutar(() => inventarioApi.cancelarPedido(id)),
+      ejecutar(() => container.inventario.cancelarPedido(id)),
   };
 }

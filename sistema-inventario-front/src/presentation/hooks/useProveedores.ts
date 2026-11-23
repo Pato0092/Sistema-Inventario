@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type DatosProveedor,
-} from "../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
+import type { DatosProveedor } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
+import { mensajeError } from "../mensajeError";
 
 export interface ProductoDeProveedor {
   id_producto: number;
@@ -34,8 +32,8 @@ export function useProveedores() {
     setError(null);
     try {
       const [proveedores, compras] = await Promise.all([
-        inventarioApi.proveedores(),
-        inventarioApi.compras(),
+        container.inventario.proveedores(),
+        container.inventario.compras(),
       ]);
       const resumen = new Map<number, { n: number; total: number }>();
       const catalogos = new Map<number, Map<number, ProductoDeProveedor>>();
@@ -86,7 +84,7 @@ export function useProveedores() {
 
   const crearProveedor = async (datos: DatosProveedor) => {
     try {
-      await inventarioApi.crearProveedor(datos);
+      await container.inventario.crearProveedor(datos);
     } catch (err) {
       throw new Error(mensajeError(err));
     }
@@ -95,7 +93,7 @@ export function useProveedores() {
 
   const actualizarProveedor = async (id: number, datos: DatosProveedor) => {
     try {
-      await inventarioApi.actualizarProveedor(id, datos);
+      await container.inventario.actualizarProveedor(id, datos);
     } catch (err) {
       throw new Error(mensajeError(err));
     }

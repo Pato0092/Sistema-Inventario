@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type UsuarioDto,
-} from "../../infrastructure/api/inventarioApi";
-import { descargarCsv } from "../../infrastructure/archivos/exportar";
+import type { UsuarioDto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
+import { descargarCsv } from "../exportar";
 import { Paginador } from "../components/Paginador";
 import { fechaHora } from "../formato";
 import { usePaginado } from "../hooks/usePaginado";
@@ -43,12 +41,12 @@ export const ActividadPage: React.FC = () => {
   const [exportando, setExportando] = useState(false);
 
   useEffect(() => {
-    inventarioApi.usuarios().then(setUsuarios).catch(() => setUsuarios([]));
+    container.inventario.usuarios().then(setUsuarios).catch(() => setUsuarios([]));
   }, []);
 
   const traer = useCallback(
     (limit: number, offset: number) =>
-      inventarioApi.bitacora({
+      container.inventario.bitacora({
         id_usuario: idUsuario ? Number(idUsuario) : undefined,
         entidad: entidad || undefined,
         desde: desde || undefined,

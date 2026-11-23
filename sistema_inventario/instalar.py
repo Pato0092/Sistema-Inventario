@@ -75,7 +75,7 @@ def preparar_env(ruta: Path) -> None:
             "DB_PASSWORD": preguntar("Contraseña de ese usuario", secreto=True),
             "DB_NAME": preguntar("Nombre para TU base de datos", "inventario"),
         }
-    faltantes = [k for k in ("DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD") if k not in valores]
+    faltantes = [k for k in ("DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD") if not valores.get(k)]
     if faltantes:
         raise ErrorInstalacion(f"Al archivo {ruta.name} le faltan: {', '.join(faltantes)}.")
     if not NOMBRE_BASE_VALIDO.match(valores["DB_NAME"]):
@@ -134,16 +134,14 @@ def hay_administradores() -> bool:
 
 
 def crear_administrador(nombre: str, correo: str, password: str) -> None:
-    from app.application.services.usuario_service import UsuarioService
     from app.infrastructure.database import SessionLocal
-    from app.infrastructure.repositories.usuario_repository import UsuarioRepositoryPostgres
-    from app.infrastructure.security import BcryptPasswordHasher
+    from app.infrastructure.dependencies import get_usuario_service
 
     if not CORREO_VALIDO.match(correo):
         raise ErrorInstalacion("Ese correo no parece válido.")
     with SessionLocal() as sesion:
         try:
-            UsuarioService(UsuarioRepositoryPostgres(sesion), BcryptPasswordHasher()).crear_usuario(nombre, correo, password, "administrador")
+            get_usuario_service(sesion).crear_usuario(nombre, correo, password, "administrador")
         except ValueError as e:
             raise ErrorInstalacion(str(e))
 

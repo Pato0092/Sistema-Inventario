@@ -28,7 +28,7 @@ class VentaRepositoryPostgres(VentaRepository):
                 costo_unitario=detalle.costo_unitario 
             )
             self.session.add(detalle_model)     
-        self.session.commit()
+        self.session.flush()
         venta.id_venta = venta_model.id_venta
         return venta
 

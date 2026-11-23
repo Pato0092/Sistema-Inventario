@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { UsuarioDto } from "../../infrastructure/api/inventarioApi";
+import type { UsuarioDto } from "../../domain/modelos";
 import { UsuarioModal } from "../components/UsuarioModal";
 import { useSesion } from "../context/SesionContext";
 import { useUsuarios } from "../hooks/useUsuarios";

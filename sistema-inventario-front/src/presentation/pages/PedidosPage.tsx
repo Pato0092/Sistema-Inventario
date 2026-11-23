@@ -1,13 +1,10 @@
 import React, { useMemo, useState } from "react";
-import type {
-  EstadoPedido,
-  PedidoDto,
-} from "../../infrastructure/api/inventarioApi";
+import type { EstadoPedido, PedidoDto } from "../../domain/modelos";
 import {
   descargarCsv,
   escaparHtml,
   imprimirDocumento,
-} from "../../infrastructure/archivos/exportar";
+} from "../exportar";
 import { ConfirmarEliminarModal } from "../components/ConfirmarEliminarModal";
 import { PedidoModal } from "../components/PedidoModal";
 import { Segmentado } from "../components/charts";

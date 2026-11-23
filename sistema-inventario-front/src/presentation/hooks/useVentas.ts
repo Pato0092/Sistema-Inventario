@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  inventarioApi,
-  type VentaDto,
-} from "../../infrastructure/api/inventarioApi";
+import type { VentaDto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
 
 export function useVentas(desde?: string) {
   const [ventas, setVentas] = useState<VentaDto[]>([]);
@@ -13,7 +11,7 @@ export function useVentas(desde?: string) {
     setLoading(true);
     setError(null);
     try {
-      setVentas((await inventarioApi.ventas({ desde })).items);
+      setVentas((await container.inventario.ventas({ desde })).items);
     } catch {
       setError("No se pudo cargar el historial de ventas.");
     } finally {

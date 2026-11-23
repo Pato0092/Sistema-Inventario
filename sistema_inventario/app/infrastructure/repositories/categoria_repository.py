@@ -13,7 +13,7 @@ class CategoriaRepositoryPostgres(CategoriaRepository):
             estado=categoria.estado
         )
         self.session.add(modelo)
-        self.session.commit()
+        self.session.flush()
         self.session.refresh(modelo)
         categoria.id_categoria = modelo.id_categoria
         return categoria
@@ -39,5 +39,5 @@ class CategoriaRepositoryPostgres(CategoriaRepository):
         if modelo:
             modelo.nombre = categoria.nombre
             modelo.estado = categoria.estado
-            self.session.commit()
+            self.session.flush()
         return categoria

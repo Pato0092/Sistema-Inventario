@@ -1,8 +1,5 @@
 import React, { useMemo, useState } from "react";
-import type {
-  DetallePedidoDto,
-  PedidoDto,
-} from "../../infrastructure/api/inventarioApi";
+import type { DetallePedidoDto, PedidoDto } from "../../domain/modelos";
 import type { ItemInventario } from "../hooks/useInventario";
 import type { ProductoDeProveedor } from "../hooks/useProveedores";
 

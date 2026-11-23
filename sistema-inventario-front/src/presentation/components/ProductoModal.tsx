@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import type {
-  CategoriaDto,
-  NuevoProducto,
-} from "../../infrastructure/api/inventarioApi";
+import type { CategoriaDto, NuevoProducto } from "../../domain/modelos";
 import type { ItemInventario } from "../hooks/useInventario";
 
 interface ProductoModalProps {

@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
-import {
-  inventarioApi,
-  type CategoriaDto,
-  type NuevoProducto,
-} from "../../infrastructure/api/inventarioApi";
+import { mensajeError } from "../mensajeError";
+import type { CategoriaDto, NuevoProducto } from "../../domain/modelos";
+import { container } from "../../infrastructure/container";
 
 export interface ItemInventario {
   id_producto: number;
@@ -32,9 +29,9 @@ export function useInventario() {
     setError(null);
     try {
       const [productos, stock, categorias] = await Promise.all([
-        inventarioApi.productos(),
-        inventarioApi.stock(),
-        inventarioApi.categorias(),
+        container.inventario.productos(),
+        container.inventario.stock(),
+        container.inventario.categorias(),
       ]);
       setCategorias(categorias);
       const stockPorProducto = new Map(stock.map((s) => [s.id_producto, s]));
@@ -68,10 +65,10 @@ export function useInventario() {
     try {
       let id_categoria = producto.id_categoria;
       if (nuevaCategoria) {
-        id_categoria = (await inventarioApi.crearCategoria(nuevaCategoria))
+        id_categoria = (await container.inventario.crearCategoria(nuevaCategoria))
           .id_categoria;
       }
-      await inventarioApi.crearProducto({ ...producto, id_categoria });
+      await container.inventario.crearProducto({ ...producto, id_categoria });
     } catch (err) {
       throw new Error(mensajeError(err));
     }
@@ -86,10 +83,10 @@ export function useInventario() {
     try {
       let id_categoria = producto.id_categoria;
       if (nuevaCategoria) {
-        id_categoria = (await inventarioApi.crearCategoria(nuevaCategoria))
+        id_categoria = (await container.inventario.crearCategoria(nuevaCategoria))
           .id_categoria;
       }
-      await inventarioApi.actualizarProducto(id, { ...producto, id_categoria });
+      await container.inventario.actualizarProducto(id, { ...producto, id_categoria });
     } catch (err) {
       throw new Error(mensajeError(err));
     }
@@ -98,7 +95,7 @@ export function useInventario() {
 
   const alternarEstado = async (item: ItemInventario) => {
     try {
-      await inventarioApi.actualizarProducto(item.id_producto, {
+      await container.inventario.actualizarProducto(item.id_producto, {
         codigo_barras: item.codigo_barras,
         nombre: item.nombre,
         marca: item.marca,
@@ -118,7 +115,7 @@ export function useInventario() {
 
   const eliminarProducto = async (id: number) => {
     try {
-      await inventarioApi.eliminarProducto(id);
+      await container.inventario.eliminarProducto(id);
     } catch (err) {
       throw new Error(mensajeError(err));
     }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { inventarioApi } from "../../infrastructure/api/inventarioApi";
-import { mensajeError } from "../../infrastructure/api/mensajeError";
+import { container } from "../../infrastructure/container";
+import { mensajeError } from "../mensajeError";
 
 export interface ItemCategoria {
   id_categoria: number;
@@ -19,8 +19,8 @@ export function useCategorias() {
     setError(null);
     try {
       const [categorias, productos] = await Promise.all([
-        inventarioApi.categorias(),
-        inventarioApi.productos(),
+        container.inventario.categorias(),
+        container.inventario.productos(),
       ]);
       const conteo = new Map<number, number>();
       for (const p of productos) {
@@ -45,7 +45,7 @@ export function useCategorias() {
 
   const crearCategoria = async (nombre: string) => {
     try {
-      await inventarioApi.crearCategoria(nombre);
+      await container.inventario.crearCategoria(nombre);
     } catch (err) {
       throw new Error(mensajeError(err));
     }
@@ -57,7 +57,7 @@ export function useCategorias() {
     datos: { nombre: string; estado: boolean },
   ) => {
     try {
-      await inventarioApi.actualizarCategoria(id, datos);
+      await container.inventario.actualizarCategoria(id, datos);
     } catch (err) {
       throw new Error(mensajeError(err));
     }
