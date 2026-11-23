@@ -38,4 +38,4 @@ Clean Architecture en el servidor (`sistema_inventario/app/`) y en la pantalla w
    La aplicación queda en <http://localhost:5173> y la API en <http:localhost:8000>.
 
  # Documentación
-- ADRs: `docs/adr/`
+- ADRs: `docs/adr`
