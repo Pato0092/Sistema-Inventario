@@ -79,6 +79,7 @@ def get_venta_service(db_session: Session = Depends(get_db)) -> VentaService:
         compra_repo=CompraRepositoryPostgres(db_session),
         unidad=unidad,
         bitacora=_bitacora(db_session, unidad),
+        movimiento_repo=MovimientoRepositoryPostgres(session=db_session),
     )
 
 def get_compra_service(db: Session = Depends(get_db)) -> CompraService:

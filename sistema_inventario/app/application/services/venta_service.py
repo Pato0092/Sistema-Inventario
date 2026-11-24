@@ -8,6 +8,8 @@ from app.domain.repositories.inventario_repository import InventarioRepository
 from app.domain.repositories.producto_repository import ProductoRepository
 from app.domain.repositories.compra_repository import CompraRepository
 from app.domain.unidad_trabajo import UnidadTrabajo
+from app.domain.entities.movimiento import SALIDA
+from app.domain.repositories.movimiento_repository import MovimientoRepository
 
 MAX_PAGINA = 200
 
@@ -20,7 +22,9 @@ class VentaService:
         compra_repo : CompraRepository,
         unidad : UnidadTrabajo,
         bitacora : BitacoraService,
+        movimiento_repo : MovimientoRepository,
     ):
+        self.movimiento_repo = movimiento_repo
         self.venta_repo = venta_repo
         self.inventario_repo = inventario_repo
         self.producto_repo = producto_repo
@@ -67,7 +71,13 @@ class VentaService:
                 inventario = self.inventario_repo.obtener_por_producto(detalle.id_producto)
                 inventario.descontar_stock(detalle.cantidad)
                 self.inventario_repo.guardar(inventario)
-            return self.venta_repo.guardar_venta(venta)
+            venta = self.venta_repo.guardar_venta(venta)
+            for detalle in venta.detalles:
+                self.movimiento_repo.registrar(
+                    venta.id_usuario, detalle.id_producto, SALIDA,
+                    detalle.cantidad, f"Venta #{venta.id_venta}",
+                )
+            return venta
 
     def listar_ventas(
         self,
